@@ -8,7 +8,7 @@ local card_ratios = {
     gtrx2080ti = 2.0,
     v100       = 2.0,
     a100       = 4.0,
-    h100       = 6.0
+    h100       = 6.0,
 }
 
 local function are_equal(a, b)
@@ -41,7 +41,7 @@ local function parse_and_check_gpu_requests(part, tres, ncpu)
         return slurm.SUCCESS
     end
 
-    if not tres or tres == "" then
+    if not tres or tres == "" or tres == slurm.NO_VAL then
         slurm.log_info(myname .. ": No GRES specified on partition " .. part .. ", skipping ratio checks.")
         return slurm.SUCCESS
     end
@@ -114,15 +114,5 @@ function slurm_job_modify(job_desc, job_rec, part_list, modify_uid)
     local tres = job_desc.tres_per_node
     local ncpu = job_desc.min_cpu or 1
 
-    local result = parse_and_check_gpu_requests(part, tres, ncpu)
-    -- Print the result for demonstration
-    if result == slurm.SUCCESS then
-        print("Result: slurm.SUCCESS")
-    elseif result == slurm.ESLURM_INVALID_GRES then
-        print("Result: slurm.ESLURM_INVALID_GRES")
-    else
-        print("Result: slurm.ERROR")
-    end
-
-    return result
+    return parse_and_check_gpu_requests(part, tres, ncpu)
 end
