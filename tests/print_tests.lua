@@ -128,6 +128,11 @@ local function test(description, job_desc)
     print("Test completed with result code: " .. result)
 end
 
+--[[ NOTE: 
+-- test cases generated with AI, fairly sure they are somewhat comprehensive for LRC (es1) but not for other clusters/partitions. 
+-- Also assumed that slurm ver 22.02 and slurm catches invalid gres / accounting / etc. 
+--]]
+
 -- 1. No GPUs requested, in target partition
 test("No GPUs, target partition", {
     partition = "es1",
